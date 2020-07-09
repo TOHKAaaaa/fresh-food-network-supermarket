@@ -1,21 +1,21 @@
 package model;
 
 public class Bean_product_infor {
-	private String product_id;
+	private int product_id;
 	private String product_name;
 	private String product_specification;
 	private String product_details;
-	private String fresh_food_id;
+	private int fresh_food_id;
 	private String fresh_food_name;
 	private String fresh_food_describe;
 	private float product_price;
 	private float product_VIP_price;
 	private int product_num;
 	
-	public String getProduct_id() {
+	public int getProduct_id() {
 		return product_id;
 	}
-	public void setProduct_id(String product_id) {
+	public void setProduct_id(int product_id) {
 		this.product_id = product_id;
 	}
 	public String getProduct_name() {
@@ -36,11 +36,11 @@ public class Bean_product_infor {
 	public void setProduct_details(String product_details) {
 		this.product_details = product_details;
 	}
-	public String getFresh_food_id() {
+	public int getFresh_food_id() {
 		return fresh_food_id;
 	}
-	public void setFresh_food_id(String fresh_food_id) {
-		this.fresh_food_id = fresh_food_id;
+	public void setFresh_food_id(int fresh_food_id2) {
+		this.fresh_food_id = fresh_food_id2;
 	}
 	public String getFresh_food_name() {
 		return fresh_food_name;

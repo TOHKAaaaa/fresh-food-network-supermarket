@@ -1,111 +1,119 @@
 package ui;
 
 import java.awt.BorderLayout;
+
+import java.awt.Button;
 import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JRadioButton;
-import javax.swing.JTextPane;
-import java.awt.Panel;
-import javax.swing.JTextField;
-import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import java.awt.Checkbox;
+import javax.swing.JTextField;
+import javax.swing.plaf.basic.BasicBorders.RadioButtonBorder;
 
-public class Frame_login extends JDialog {
+import org.omg.CORBA.PRIVATE_MEMBER;
 
-	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
-	private JPasswordField passwordField;
+import fresh_food.util;
+import model.Bean_admin_infor;
+//import cn.edu.zucc.personplan.PersonPlanUtil;
+//import cn.edu.zucc.personplan.model.BeanUser;
+import util.BaseException;
+import javax.swing.JRadioButton;
 
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		try {
-//			Frame_login dialog = new Frame_login();
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-//
-//	/**
-//	 * Create the dialog.
-//	 */
-	public Frame_login() {
-		setBounds(100, 100, 450, 300);
-		getContentPane().setLayout(null);
-		contentPanel.setBounds(0, 0, 432, 216);
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel);
-		contentPanel.setLayout(null);
-		{
-			JLabel label = new JLabel("\u7528\u6237\u540D");
-			label.setBounds(87, 58, 45, 18);
-			label.setVerticalAlignment(SwingConstants.TOP);
-			contentPanel.add(label);
-		}
+
+public class Frame_login extends JDialog implements ActionListener {
+	public static boolean if_admin = false;
+	private JPanel toolBar = new JPanel();
+	private JPanel workPane = new JPanel();
+	private JButton btnLogin = new JButton("登陆");
+	private JButton btnCancel = new JButton("退出");
+	private JButton btnRegister = new JButton("注册");
+	
+	private JLabel labelUser = new JLabel("用户：");
+	private JLabel labelPwd = new JLabel("密码：");
+	private JTextField edtUserId = new JTextField(20);
+	private JPasswordField edtPwd = new JPasswordField(20);
+
+	public Frame_login(Frame frame_main, String s, boolean b) {
+		super(frame_main,s,b);
+		toolBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		toolBar.add(this.btnRegister);
+		toolBar.add(btnLogin);
+		toolBar.add(btnCancel);
+		this.getContentPane().add(toolBar, BorderLayout.SOUTH);
+		workPane.setLayout(null);
+		labelUser.setBounds(46, 8, 45, 18);
+		workPane.add(labelUser);
+		edtUserId.setBounds(95, 5, 166, 24);
+		workPane.add(edtUserId);
+		labelPwd.setBounds(46, 37, 45, 18);
+		workPane.add(labelPwd);
+		edtPwd.setBounds(95, 34, 166, 24);
+		workPane.add(edtPwd);
+		this.getContentPane().add(workPane, BorderLayout.CENTER);
 		
-		JLabel label = new JLabel("\u5BC6\u7801");
-		label.setBounds(87, 120, 72, 18);
-		contentPanel.add(label);
+		JRadioButton radioButton = new JRadioButton("管理员",true);
+		radioButton.setBounds(94, 67, 97, 27);
+		workPane.add(radioButton);
 		
-		textField = new JTextField();
-		textField.setBounds(153, 55, 150, 24);
-		contentPanel.add(textField);
-		textField.setColumns(10);
-		{
-			passwordField = new JPasswordField();
-			passwordField.setBounds(153, 117, 150, 24);
-			contentPanel.add(passwordField);
-		}
-		
-		JRadioButton radioButton = new JRadioButton("\u7BA1\u7406\u5458");
-		radioButton.setBounds(157, 168, 83, 27);
-		contentPanel.add(radioButton);
-		
-		JRadioButton radioButton_1 = new JRadioButton("\u7528\u6237");
-		radioButton_1.setBounds(249, 168, 83, 27);
-		contentPanel.add(radioButton_1);
-		
-		JLabel label_1 = new JLabel("\u767B\u5F55\u8EAB\u4EFD");
-		label_1.setBounds(87, 172, 72, 18);
-		contentPanel.add(label_1);
+		JRadioButton radioButton_1 = new JRadioButton("用户");
+		radioButton_1.setBounds(195, 67, 97, 27);
+		workPane.add(radioButton_1);
 		ButtonGroup buttonGroup = new ButtonGroup();
 		buttonGroup.add(radioButton);
 		buttonGroup.add(radioButton_1);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setBounds(0, 216, 432, 37);
-			getContentPane().add(buttonPane);
-			buttonPane.setLayout(null);
-			{
-				JButton button = new JButton("\u6CE8\u518C");
-				button.setBounds(229, 5, 63, 27);
-				buttonPane.add(button);
+		
+		JLabel label = new JLabel("用户类型:");
+		label.setBounds(14, 71, 77, 18);
+		workPane.add(label);
+		this.setSize(320, 176);
+		// 屏幕居中显示
+		double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		this.setLocation((int) (width - this.getWidth()) / 2,
+				(int) (height - this.getHeight()) / 2);
+
+		this.validate();
+
+		btnLogin.addActionListener(this);
+		btnCancel.addActionListener(this);
+		this.btnRegister.addActionListener(this);
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
 			}
-			{
-				JButton okButton = new JButton("\u767B\u5F55");
-				okButton.setBounds(296, 5, 63, 27);
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+		});
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == this.btnLogin) {
+			String userid=this.edtUserId.getText();
+			String pwd=new String(this.edtPwd.getPassword());
+			try {
+				Bean_admin_infor.currentLoginadmin= util.userManger.login(userid, pwd);
+			} catch (BaseException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
+				return;
 			}
-			{
-				JButton cancelButton = new JButton("\u9000\u51FA");
-				cancelButton.setBounds(364, 5, 63, 27);
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-				
-			}
+			this.setVisible(false);
+			
+		} else if (e.getSource() == this.btnCancel) {
+			System.exit(0);
+		} else if(e.getSource()==this.btnRegister){
+			Frame_register dlg=new Frame_register(this,"生鲜网超注册界面",true);
+			dlg.setVisible(true);
 		}
 	}
 }

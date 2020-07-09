@@ -1,6 +1,6 @@
 package model;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 public class Bean_customer_infor {
 	public static Bean_customer_infor currentLogincustomer = null;
@@ -13,7 +13,7 @@ public class Bean_customer_infor {
 	private String customer_email;
 	private String customer_city;
 	private Timestamp customer_registration_date;
-	private boolean customer_VIPwhether;
+	private int customer_VIPwhether;
 	private Timestamp customer_VIPddl;
 	public String getCustomer_id() {
 		return customer_id;
@@ -60,13 +60,13 @@ public class Bean_customer_infor {
 	public Timestamp getCustomer_registration_date() {
 		return customer_registration_date;
 	}
-	public void setCustomer_registration_date(Timestamp customer_registration_date) {
-		this.customer_registration_date = customer_registration_date;
+	public void setCustomer_registration_date(String customer_registration_date) {
+		this.customer_registration_date = Timestamp.valueOf(customer_registration_date);
 	}
-	public boolean isCustomer_VIPwhether() {
+	public int isCustomer_VIPwhether() {
 		return customer_VIPwhether;
 	}
-	public void setCustomer_VIPwhether(boolean customer_VIPwhether) {
+	public void setCustomer_VIPwhether(int customer_VIPwhether) {
 		this.customer_VIPwhether = customer_VIPwhether;
 	}
 	public Timestamp getCustomer_VIPddl() {

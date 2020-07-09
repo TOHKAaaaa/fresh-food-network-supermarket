@@ -3,7 +3,7 @@ package util;
 import java.sql.Connection;
 
 public class DBUtil {
-	private static final String jdbcUrl="jdbc:mysql://localhost:3308/freshfood";
+	private static final String jdbcUrl="jdbc:mysql://localhost:3308/fresh_food";
 	private static final String dbUser="root";
 	private static final String dbPwd="036831";
 	static{
