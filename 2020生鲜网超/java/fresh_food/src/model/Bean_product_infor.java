@@ -1,6 +1,8 @@
 package model;
 
 public class Bean_product_infor {
+	public static final String[] tableTitles={"商品id","商品名称","数量","价格","会员价"};
+	
 	private int product_id;
 	private String product_name;
 	private String product_specification;
@@ -71,6 +73,25 @@ public class Bean_product_infor {
 	}
 	public void setProduct_num(int product_num) {
 		this.product_num = product_num;
+	}
+	
+	//tableTitles={"商品id","商品名称","数量","价格","会员价"}
+	public String getCell(int col){
+		String result = null;
+		
+		if(col==0) 
+			result = String.valueOf(getProduct_id());
+		else if(col==1) 
+			result = getProduct_name();
+		else if(col==2) 
+			result = String.valueOf(getProduct_num());
+		else if(col==3) 
+			result = String.valueOf(getProduct_price());
+		else if(col==4)
+			result = String.valueOf(getProduct_VIP_price());
+		else 
+			result = "";
+		return result;
 	}
 	
 }

@@ -14,4 +14,5 @@ public interface IUserProductManger {
 	public void deleteProduct(Bean_product_infor product)throws BaseException;
 	//管理员采购商品
 	public Bean_product_infor buyProduct (int product_id,int fresh_food_id,int sum)throws BaseException;
+	
 }

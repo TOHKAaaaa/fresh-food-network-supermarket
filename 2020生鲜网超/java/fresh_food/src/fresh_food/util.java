@@ -1,9 +1,13 @@
 package fresh_food;
 
 import example.ExampleCustomerManger;
+import example.ExampleDiscountManger;
 import example.ExampleUserManger;
+import example.ExampleUserProductManger;
 import itf.ICustomerManger;
+import itf.IDiscountManger;
 import itf.IUserManger;
+import itf.IUserProductManger;
 
 //import cn.edu.zucc.personplan.comtrol.example.ExamplePlanManager;
 //import cn.edu.zucc.personplan.comtrol.example.ExampleStepManager;
@@ -18,4 +22,6 @@ public class util {
 //	public static IUserManager userManager=new ExampleUserManager();//需要换成自行设计的实现类
 	public static IUserManger userManger = new ExampleUserManger();
 	public static ICustomerManger customerManger = new ExampleCustomerManger();
+	public static IUserProductManger userProductManger = new ExampleUserProductManger();
+	public static IDiscountManger discountManger = new ExampleDiscountManger();
 }

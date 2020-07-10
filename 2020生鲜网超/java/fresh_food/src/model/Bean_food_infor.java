@@ -1,6 +1,7 @@
 package model;
 
 public class Bean_food_infor {
+	
 	private String food_id;
 	private String product_id;
 	private String fresh_food_id;
