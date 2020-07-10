@@ -2,18 +2,25 @@ package ui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -27,6 +34,7 @@ public class Frame_main extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private JMenuBar menubar=new JMenuBar(); 
 	private Frame_login dlgLogin=null;
+	private JPanel statusBar = new JPanel();
 	//菜单定义
 	private JMenu user_menu = new JMenu("个人中心");
 	private JMenu product_menu = new JMenu("商品选项");
@@ -59,6 +67,7 @@ public class Frame_main extends JFrame implements ActionListener{
 	DefaultTableModel DiscountModel=new DefaultTableModel();
 	private JTable dataDisount=new JTable(DiscountModel);
 	
+	private Bean_product_infor curProduct = null;
 	List<Bean_product_infor> allProduct = null;
 	List<Bean_discount_infor> allDiscount = null;
 	
@@ -79,38 +88,41 @@ public class Frame_main extends JFrame implements ActionListener{
 		this.dataProduct.repaint();
 	}
 	
-	private void reloadDiscountTable(){//这是测试数据，需要用实际数替换
+	private void reloadDiscountTable(int planIdx){
+		if(planIdx<0) return;
+		curProduct=allProduct.get(planIdx);
 		try {
-			allProduct=util.userProductManger.loadallProduct();
+			allDiscount=util.discountManger.loadallDiscount_infor(curProduct);
 		} catch (BaseException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		ProductData =  new Object[allProduct.size()][Bean_product_infor.tableTitles.length];
-		for(int i=0;i<allProduct.size();i++){
-			for(int j=0;j<Bean_product_infor.tableTitles.length;j++)
-				ProductData[i][j]=allProduct.get(i).getCell(j);
+		DiscountData =new Object[allDiscount.size()][Bean_discount_infor.tableTitles.length];
+		for(int i=0;i<allDiscount.size();i++){
+			for(int j=0;j<Bean_discount_infor.tableTitles.length;j++)
+				DiscountData[i][j]=allDiscount.get(i).getCell(j);
 		}
-		ProductModel.setDataVector(ProductData,Producttitle);
-		this.dataProduct.validate();
-		this.dataProduct.repaint();
+		
+		DiscountModel.setDataVector(DiscountData,Discounttitle);
+		this.dataDisount.validate();
+		this.dataDisount.repaint();
 	}
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Frame_main frame = new Frame_main();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Frame_main frame = new Frame_main();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
@@ -143,12 +155,41 @@ public class Frame_main extends JFrame implements ActionListener{
 		menubar.add(admin_menu);
 		this.setJMenuBar(menubar);
 		
+		this.getContentPane().add(new JScrollPane(this.dataProduct), BorderLayout.WEST);
+		
+		this.dataProduct.addMouseListener(new MouseAdapter (){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int i=Frame_main.this.dataProduct.getSelectedRow();
+				if(i<0) {
+					return;
+				}
+				Frame_main.this.reloadDiscountTable(i);
+			}
+	    	
+	    });
+		 this.getContentPane().add(new JScrollPane(this.dataDisount), BorderLayout.CENTER);
+		    
+		 this.reloadProductTable();
+		//状态栏
+		    statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+		    JLabel label=new JLabel("您好!");//修改成   您好！+登陆用户名
+		    statusBar.add(label);
+		    this.getContentPane().add(statusBar,BorderLayout.SOUTH);
+		    this.addWindowListener(new WindowAdapter(){   
+		    	public void windowClosing(WindowEvent e){ 
+		    		System.exit(0);
+	             }
+	        });
+		    this.setVisible(true);
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		
 		
 	}
 

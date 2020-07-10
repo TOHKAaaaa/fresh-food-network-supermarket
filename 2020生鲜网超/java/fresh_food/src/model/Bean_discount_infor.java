@@ -61,6 +61,23 @@ public class Bean_discount_infor {
 	public void setEnd_date(Timestamp end_date) {
 		this.end_date = end_date;
 	}
+//	tableTitles={"优惠券id","启用日期","到期日期","减免价格","可用价格"}
+	public String getCell(int col){
+		String result;
+		if(col==0) 
+			result = getDiscount_id();
+		else if(col==1) 
+			result = String.valueOf(getStart_date());
+		else if(col==2) 
+			result = String.valueOf(getEnd_date());
+		else if(col==3) 
+			result = String.valueOf(getDiscount_price());
+		else if(col==4) 
+			result = String.valueOf(getApply_price());
+		else 
+			result = "";
+		return result;
+	}
 	
 	
 }
