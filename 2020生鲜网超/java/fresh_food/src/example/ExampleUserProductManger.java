@@ -15,8 +15,8 @@ import util.DBUtil;
 public class ExampleUserProductManger implements IUserProductManger{
 
 	@Override
-	public Bean_product_infor addProduct(String product_name, float price, float VIP_price, int fresh_food_id,
-			String fresh_food_name) throws BaseException {
+	public Bean_product_infor addProduct(int product_id,String product_name, float price, float VIP_price, int fresh_food_id,
+			String fresh_food_name,String product_describe) throws BaseException {
 		// TODO Auto-generated method stub
 		java.sql.Connection conn = null;
 		Bean_product_infor result = new Bean_product_infor();
@@ -28,43 +28,39 @@ public class ExampleUserProductManger implements IUserProductManger{
 			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
 			pst.setString(1, product_name);
 			java.sql.ResultSet rs = pst.executeQuery();
-			if(!rs.next())
+			if(rs.next())
 				throw new BusinessException("存在同名商品！");
 			rs.close();
 			pst.close();
-			int maxproductid=0;
-			sql = "SELECT max(product_id)\r\n" + 
+			sql = "SELECT count(product_id)\r\n" + 
 					"FROM product_infor\r\n" + 
-					"WHERE fresh_food_id = ?";
+					"WHERE product_id = ? AND fresh_food_id = ?";
 			pst = conn.prepareStatement(sql);
-			pst.setInt(1, fresh_food_id);
+			pst.setInt(1, product_id);
+			pst.setInt(2, fresh_food_id);
 			rs = pst.executeQuery();
-			if(rs.next())
-				maxproductid = rs.getInt(1) + 1;
-			else
-				maxproductid = 1;
+			if(rs.next()) {
+				if(rs.getInt(1)>=1)
+					throw new BusinessException("同一生鲜类别下已存在该编号的商品！");
+			}
 			pst.close();
 			rs.close();
-			sql = "INSERT INTO product_infor(product_name,product_price,product_VIP_price,fresh_food_id,fresh_food_name,product_id)\r\n" + 
-					"VALUE (?,?,?,?,?)";
+			sql = "INSERT INTO product_infor(product_name,product_price,product_VIP_price,fresh_food_id,fresh_food_name,product_id,fresh_food_describe)\r\n" + 
+					"VALUE (?,?,?,?,?,?,?)";
 			pst = conn.prepareStatement(sql);
 			pst.setString(1, product_name);
 			pst.setFloat(2, price);
 			pst.setFloat(3, VIP_price);
 			pst.setInt(4, fresh_food_id);
 			pst.setString(5, fresh_food_name);
-			pst.setInt(6, maxproductid);
+			pst.setInt(6, product_id);
+			pst.setString(7, product_describe);
 			pst.execute();
 			pst.close();
-			result.setProduct_name(product_name);
-			result.setProduct_price(price);
-			result.setProduct_VIP_price(VIP_price);
-			result.setFresh_food_id(fresh_food_id);
-			result.setFresh_food_name(fresh_food_name);
-			result.setProduct_id(maxproductid);
 			return result;
 		} catch (SQLException e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}finally {
 			if(conn!=null) {
 				try {
@@ -87,7 +83,7 @@ public class ExampleUserProductManger implements IUserProductManger{
 			conn = DBUtil.getConnection();
 			String sql = "SELECT product_id,product_name,product_price,product_VIP_price,product_num,product_specification,product_details,fresh_food_id,fresh_food_name,fresh_food_describe\r\n" + 
 					"FROM product_infor\r\n" + 
-					"ORDER BY fresh_food_id";
+					"ORDER BY fresh_food_id,product_id";
 			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
 			java.sql.ResultSet rs = pst.executeQuery();
 			while(rs.next()) {
@@ -127,13 +123,23 @@ public class ExampleUserProductManger implements IUserProductManger{
 	public void deleteProduct(Bean_product_infor product) throws BaseException {
 		// TODO Auto-generated method stub
 		java.sql.Connection conn =null;
-		if(product.getProduct_num()>0)
-			throw new BusinessException("该商品已经存在库存！");
 		try {
 			conn = DBUtil.getConnection();
-			String sql = "DELETE FROM product_infor \r\n" + 
-					"WHERE fresh_food_id = ? AND product_id = ?";
+			String sql = "SELECT product_num\r\n" + 
+					"FROM product_infor\r\n" + 
+					"WHERE product_id = ? AND fresh_food_id = ?";
 			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setInt(1, product.getProduct_id());
+			pst.setInt(2, product.getFresh_food_id());
+			java.sql.ResultSet rs = pst.executeQuery();
+			if(rs.next()) 
+				if(rs.getInt(1)>0)
+					throw new BusinessException("该商品还有库存！");
+			rs.close();
+			pst.close();
+			sql = "DELETE FROM product_infor \r\n" + 
+					"WHERE fresh_food_id = ? AND product_id = ?";
+			pst = conn.prepareStatement(sql);
 			pst.setInt(1, product.getFresh_food_id());
 			pst.setInt(2, product.getProduct_id());
 			pst.execute();
@@ -174,7 +180,7 @@ public class ExampleUserProductManger implements IUserProductManger{
 		try {
 			conn = DBUtil.getConnection();
 			String sql = "UPDATE product_infor \r\n" + 
-					"SET product_num = ?\r\n" + 
+					"SET product_num = product_num + ?\r\n" + 
 					"WHERE product_id = ? AND fresh_food_id = ?";
 			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
 			pst.setInt(1, sum);

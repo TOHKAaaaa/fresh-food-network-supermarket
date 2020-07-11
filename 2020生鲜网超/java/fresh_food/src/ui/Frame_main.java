@@ -49,8 +49,8 @@ public class Frame_main extends JFrame implements ActionListener{
 	private JMenuItem becomeVIP_MenuItem = new JMenuItem("成为会员");
 	private JMenuItem havebought_MenuItem = new JMenuItem("已购商品");
 	//商品选项
-	private JMenuItem productinfor_MenuItem = new JMenuItem("显示所有商品");
-	private JMenuItem productbuy_MenuItem = new JMenuItem("购买商品");
+	private JMenuItem productinfor_MenuItem = new JMenuItem("显示购物车");
+	private JMenuItem productitembuy_MenuItem = new JMenuItem("添加到购物车");
 	//管理员操作
 	private JMenuItem deluser_MenuItem = new JMenuItem("删除用户");
 	private JMenuItem consumeuser_MenuItem = new JMenuItem("用户消费情况");
@@ -144,7 +144,7 @@ public class Frame_main extends JFrame implements ActionListener{
 		this.user_menu.add(this.havebought_MenuItem); this.havebought_MenuItem.addActionListener(this);
 		//商品选项
 		this.product_menu.add(this.productinfor_MenuItem); this.productinfor_MenuItem.addActionListener(this);
-		this.product_menu.add(this.productbuy_MenuItem); this.productbuy_MenuItem.addActionListener(this);
+		this.product_menu.add(this.productitembuy_MenuItem); this.productitembuy_MenuItem.addActionListener(this);
 		//管理员操作
 		this.admin_menu.add(this.deluser_MenuItem); this.deluser_MenuItem.addActionListener(this);
 		this.admin_menu.add(this.consumeuser_MenuItem); this.consumeuser_MenuItem.addActionListener(this);
@@ -159,7 +159,7 @@ public class Frame_main extends JFrame implements ActionListener{
 		menubar.add(admin_menu);
 		this.setJMenuBar(menubar);
 		
-		this.getContentPane().add(new JScrollPane(this.dataProduct), BorderLayout.WEST);
+		this.getContentPane().add(new JScrollPane(this.dataProduct), BorderLayout.CENTER);
 		
 		this.dataProduct.addMouseListener(new MouseAdapter (){
 
@@ -173,7 +173,7 @@ public class Frame_main extends JFrame implements ActionListener{
 			}
 	    	
 	    });
-		 this.getContentPane().add(new JScrollPane(this.dataDisount), BorderLayout.CENTER);
+		 this.getContentPane().add(new JScrollPane(this.dataDisount), BorderLayout.EAST);
 		    
 		 this.reloadProductTable();
 		//状态栏
@@ -202,7 +202,21 @@ public class Frame_main extends JFrame implements ActionListener{
 			Frame_changepwd dlg = new Frame_changepwd(this, "密码修改", true);
 			dlg.setVisible(true);
 		}
-		
+		else if(e.getSource()==this.addproduct_MenuItem) {
+			Frame_addproduct dlg = new Frame_addproduct(this,"添加商品",true);
+			dlg.setVisible(true);
+			Frame_main.this.reloadProductTable();
+		}
+		else if(e.getSource()==this.delproduct_MenuItem) {
+			Frame_delproduct dlg = new Frame_delproduct(this, "删除商品", true);
+			dlg.setVisible(true);
+			Frame_main.this.reloadProductTable();
+		}
+		else if(e.getSource()==this.buyproduct_MenuItem) {
+			Frame_buyproduct dlg = new Frame_buyproduct(this, "采购商品", true);
+			dlg.setVisible(true);
+			Frame_main.this.reloadProductTable();
+		}
 	}
 
 }

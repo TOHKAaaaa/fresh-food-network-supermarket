@@ -1,7 +1,7 @@
 package model;
 
 public class Bean_product_infor {
-	public static final String[] tableTitles={"商品id","商品名称","数量","价格","会员价"};
+	public static final String[] tableTitles={"生鲜编号","生鲜类别","商品编号","商品名称","数量","价格","会员价","商品描述"};
 	
 	private int product_id;
 	private String product_name;
@@ -79,16 +79,22 @@ public class Bean_product_infor {
 	public String getCell(int col){
 		String result = null;
 		
-		if(col==0) 
-			result = String.valueOf(getProduct_id());
-		else if(col==1) 
-			result = getProduct_name();
+		if(col==0)
+			result = String.valueOf(getFresh_food_id());
+		else if(col==1)
+			result = getFresh_food_name();
 		else if(col==2) 
-			result = String.valueOf(getProduct_num());
+			result = String.valueOf(getProduct_id());
 		else if(col==3) 
+			result = getProduct_name();
+		else if(col==4) 
+			result = String.valueOf(getProduct_num());
+		else if(col==5) 
 			result = String.valueOf(getProduct_price());
-		else if(col==4)
+		else if(col==6)
 			result = String.valueOf(getProduct_VIP_price());
+		else if(col==7)
+			result = getFresh_food_describe();
 		else 
 			result = "";
 		return result;
