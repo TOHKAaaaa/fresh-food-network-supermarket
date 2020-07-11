@@ -1,6 +1,7 @@
 package itf;
 
 import model.Bean_admin_infor;
+import model.Bean_customer_infor;
 import util.BaseException;
 
 public interface IUserManger {
@@ -10,4 +11,6 @@ public interface IUserManger {
 	public Bean_admin_infor login(String userid,String pwd)throws BaseException;
 	//管理员修改密码
 	public void changePwd(Bean_admin_infor user, String oldPwd,String newPwd, String newPwd2)throws BaseException;
+	//管理员删除用户
+	public void deletecustomer(Bean_customer_infor customer)throws BaseException;
 }

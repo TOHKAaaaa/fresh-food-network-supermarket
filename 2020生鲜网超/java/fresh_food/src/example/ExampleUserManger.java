@@ -6,6 +6,7 @@ import com.mysql.jdbc.Connection;
 
 import itf.IUserManger;
 import model.Bean_admin_infor;
+import model.Bean_customer_infor;
 import util.BaseException;
 import util.BusinessException;
 import util.DBUtil;
@@ -136,6 +137,41 @@ public class ExampleUserManger implements IUserManger {
 			pst = conn.prepareStatement(sql);
 			pst.setString(1, newPwd);
 			pst.setString(2, user.getAdmin_id());
+			pst.execute();
+			pst.close();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}finally {
+			if(conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	@Override
+	public void deletecustomer(Bean_customer_infor customer) throws BaseException {
+		// TODO Auto-generated method stub
+		java.sql.Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			String sql = "SELECT 1\r\n" + 
+					"FROM customer_infor\r\n" + 
+					"WHERE customer_id = ? AND customer_VIPwhether = 1";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, customer.getCustomer_id());
+			java.sql.ResultSet rs = pst.executeQuery();
+			if(rs.next())
+				throw new BusinessException("该客户还是VIP，无法删除！");
+			rs.close();
+			pst.close();
+			sql = "DELETE FROM customer_infor WHERE customer_id = ?";
+			pst.setString(1, customer.getCustomer_id());
 			pst.execute();
 			pst.close();
 		} catch (SQLException e) {
