@@ -26,6 +26,7 @@ import org.omg.CORBA.PRIVATE_MEMBER;
 
 import fresh_food.util;
 import model.Bean_admin_infor;
+import model.Bean_customer_infor;
 //import cn.edu.zucc.personplan.PersonPlanUtil;
 //import cn.edu.zucc.personplan.model.BeanUser;
 import util.BaseException;
@@ -44,6 +45,10 @@ public class Frame_login extends JDialog implements ActionListener {
 	private JLabel labelPwd = new JLabel("密码：");
 	private JTextField edtUserId = new JTextField(20);
 	private JPasswordField edtPwd = new JPasswordField(20);
+	
+	private JRadioButton customer_radioButton = new JRadioButton("用户");
+	private JRadioButton admin_radioButton = new JRadioButton("管理员",true);
+	
 
 	public Frame_login(Frame frame_main, String s, boolean b) {
 		super(frame_main,s,b);
@@ -63,16 +68,14 @@ public class Frame_login extends JDialog implements ActionListener {
 		workPane.add(edtPwd);
 		this.getContentPane().add(workPane, BorderLayout.CENTER);
 		
-		JRadioButton radioButton = new JRadioButton("管理员",true);
-		radioButton.setBounds(94, 67, 97, 27);
-		workPane.add(radioButton);
+		admin_radioButton.setBounds(94, 67, 97, 27);
+		workPane.add(admin_radioButton);
 		
-		JRadioButton radioButton_1 = new JRadioButton("用户");
-		radioButton_1.setBounds(195, 67, 97, 27);
-		workPane.add(radioButton_1);
+		customer_radioButton.setBounds(195, 67, 97, 27);
+		workPane.add(customer_radioButton);
 		ButtonGroup buttonGroup = new ButtonGroup();
-		buttonGroup.add(radioButton);
-		buttonGroup.add(radioButton_1);
+		buttonGroup.add(admin_radioButton);
+		buttonGroup.add(customer_radioButton);
 		
 		JLabel label = new JLabel("用户类型:");
 		label.setBounds(14, 71, 77, 18);
@@ -102,7 +105,18 @@ public class Frame_login extends JDialog implements ActionListener {
 			String userid=this.edtUserId.getText();
 			String pwd=new String(this.edtPwd.getPassword());
 			try {
-				Bean_admin_infor.currentLoginadmin= util.userManger.login(userid, pwd);
+//				Bean_admin_infor.currentLoginadmin= util.userManger.login(userid, pwd);
+				int type=0;
+				if(admin_radioButton.isSelected())
+					type = 1;
+				else if(customer_radioButton.isSelected())
+					type = 2;
+				switch (type) {
+				case 1:Bean_admin_infor.currentLoginadmin = util.userManger.login(userid, pwd);break;
+				case 2:Bean_customer_infor.currentLogincustomer = util.customerManger.login(userid, pwd);break;
+				default:break;
+				}
+				
 			} catch (BaseException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 				return;

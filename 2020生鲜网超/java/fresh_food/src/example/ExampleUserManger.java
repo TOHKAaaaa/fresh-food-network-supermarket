@@ -72,25 +72,24 @@ public class ExampleUserManger implements IUserManger {
 			pst.setString(1, userid);
 			pst.setString(2, pwd);
 			java.sql.ResultSet rs = pst.executeQuery();
-			if(rs.next()) {
-				if(rs.getString(1).equals(pwd)) {
-					String sql1 = "SELECT admin_id,admin_name,admin_pwd\r\n" + 
-							"FROM admin_infor\r\n" + 
-							"WHERE admin_id = ?";
-					java.sql.PreparedStatement pst1 = conn.prepareStatement(sql1);
-					pst1.setString(1, userid);
-					java.sql.ResultSet rs1 = pst.executeQuery();
-					if(rs.next()) {
-						result.setAdmin_id(rs.getString(1));
-						result.setAdmin_name(rs.getString(2));
-						result.setAdmin_pwd(rs.getString(3));
-					}
-					pst1.close();
-					rs1.close();
-				}
-			}
-			else
+			if(!rs.next())
 				throw new BusinessException("用户名不存在或密码错误！");
+			rs.close();
+			pst.close();
+			sql = "SELECT admin_id,admin_name,admin_pwd\r\n" + 
+					"FROM admin_infor\r\n" + 
+					"WHERE admin_id = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, userid);
+			rs = pst.executeQuery();
+			if(rs.next()) {
+				result.setAdmin_id(rs.getString(1));
+				result.setAdmin_name(rs.getString(2));
+				result.setAdmin_pwd(rs.getString(3));
+			}
+			pst.close();
+			rs.close();
+			return result;
 		} catch (SQLException e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -126,6 +125,7 @@ public class ExampleUserManger implements IUserManger {
 			pst.setString(1, user.getAdmin_id());
 			pst.setString(2, oldPwd);
 			java.sql.ResultSet rs = pst.executeQuery();
+			
 			if(!rs.next())
 				throw new BusinessException("用户名不存在或密码错误！");
 			rs.close();
@@ -136,6 +136,7 @@ public class ExampleUserManger implements IUserManger {
 			pst = conn.prepareStatement(sql);
 			pst.setString(1, newPwd);
 			pst.setString(2, user.getAdmin_id());
+			pst.execute();
 			pst.close();
 		} catch (SQLException e) {
 			// TODO: handle exception

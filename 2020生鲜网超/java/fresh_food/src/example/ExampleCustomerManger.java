@@ -168,6 +168,7 @@ public class ExampleCustomerManger implements ICustomerManger {
 			pst = conn.prepareStatement(sql);
 			pst.setString(1, newPwd);
 			pst.setString(2, user.getCustomer_id());
+			pst.execute();
 			pst.close();
 		} catch (SQLException e) {
 			// TODO: handle exception

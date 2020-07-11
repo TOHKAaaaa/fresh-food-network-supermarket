@@ -26,6 +26,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import fresh_food.util;
+import model.Bean_admin_infor;
+import model.Bean_customer_infor;
 import model.Bean_discount_infor;
 import model.Bean_product_infor;
 import util.BaseException;
@@ -45,6 +47,7 @@ public class Frame_main extends JFrame implements ActionListener{
 	private JMenuItem changepwd_MenuItem = new JMenuItem("修改密码");
 	private JMenuItem changeinfor_MenuItem = new JMenuItem("修改个人信息");
 	private JMenuItem becomeVIP_MenuItem = new JMenuItem("成为会员");
+	private JMenuItem havebought_MenuItem = new JMenuItem("已购商品");
 	//商品选项
 	private JMenuItem productinfor_MenuItem = new JMenuItem("显示所有商品");
 	private JMenuItem productbuy_MenuItem = new JMenuItem("购买商品");
@@ -138,6 +141,7 @@ public class Frame_main extends JFrame implements ActionListener{
 		this.user_menu.add(this.changeinfor_MenuItem); this.changeinfor_MenuItem.addActionListener(this);
 		this.user_menu.add(this.changepwd_MenuItem); this.changepwd_MenuItem.addActionListener(this);
 		this.user_menu.add(this.becomeVIP_MenuItem); this.becomeVIP_MenuItem.addActionListener(this);
+		this.user_menu.add(this.havebought_MenuItem); this.havebought_MenuItem.addActionListener(this);
 		//商品选项
 		this.product_menu.add(this.productinfor_MenuItem); this.productinfor_MenuItem.addActionListener(this);
 		this.product_menu.add(this.productbuy_MenuItem); this.productbuy_MenuItem.addActionListener(this);
@@ -183,13 +187,21 @@ public class Frame_main extends JFrame implements ActionListener{
 	             }
 	        });
 		    this.setVisible(true);
+		    
+		    if(Bean_customer_infor.currentLogincustomer==null)
+				admin_menu.setVisible(true);
+			if(Bean_admin_infor.currentLoginadmin==null) 
+				admin_menu.setVisible(false);
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+		if(e.getSource()==this.changepwd_MenuItem) {
+			Frame_changepwd dlg = new Frame_changepwd(this, "密码修改", true);
+			dlg.setVisible(true);
+		}
 		
 	}
 
