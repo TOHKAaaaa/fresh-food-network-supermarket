@@ -1,6 +1,6 @@
 package model;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 public class Bean_discount_infor {
 	public static final String[] tableTitles={"可用优惠券id","启用日期","到期日期","减免价格","可用价格"};
@@ -52,8 +52,8 @@ public class Bean_discount_infor {
 	public Timestamp getStart_date() {
 		return start_date;
 	}
-	public void setStart_date(Timestamp start_date) {
-		this.start_date = start_date;
+	public void setStart_date(Timestamp timestamp) {
+		this.start_date = timestamp;
 	}
 	public Timestamp getEnd_date() {
 		return end_date;

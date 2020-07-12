@@ -15,4 +15,8 @@ public interface ICustomerManger {
 	//客户修改个人信息
 	//姓名，性别，电话号码，电子邮箱，所在城市
 	public Bean_customer_infor changeInfor (String name,String sex,String phonenum,String email,String city)throws BaseException;
+	//客户成为会员
+	public Bean_customer_infor becomeVIP (int time)throws BaseException;
+	//客户续费会员
+	public Bean_customer_infor renewVIP (int time)throws BaseException;
 }

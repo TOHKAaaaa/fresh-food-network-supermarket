@@ -221,4 +221,80 @@ public class ExampleCustomerManger implements ICustomerManger {
 		return result;
 	}
 
+	@Override
+	public Bean_customer_infor becomeVIP(int time) throws BaseException {
+		// TODO Auto-generated method stub
+		Bean_customer_infor result = new Bean_customer_infor();
+		java.sql.Connection conn = null;
+		if(Bean_customer_infor.currentLogincustomer.isCustomer_VIPwhether().equals("是"))
+			throw new BusinessException("您已经是会员了，不需要再次成为会员！");
+		try {
+			conn = DBUtil.getConnection();
+			String sql = "UPDATE customer_infor \r\n" + 
+					"SET customer_VIPwhether = 1 \r\n" + 
+					"WHERE customer_id = ?";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, Bean_customer_infor.currentLogincustomer.getCustomer_id());
+			pst.executeUpdate();
+			pst.close();
+			sql = "UPDATE customer_infor SET customer_VIPddl = DATE_ADD(NOW(),INTERVAL ? MONTH) WHERE customer_id = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setInt(1, time);
+			pst.setString(2, Bean_customer_infor.currentLogincustomer.getCustomer_id());
+			pst.executeUpdate();
+			pst.close();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}finally {
+			if(conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public Bean_customer_infor renewVIP(int time) throws BaseException {
+		// TODO Auto-generated method stub
+		Bean_customer_infor result = new Bean_customer_infor();
+		java.sql.Connection conn = null;
+		if(Bean_customer_infor.currentLogincustomer.isCustomer_VIPwhether().equals("否"))
+			throw new BusinessException("您还不是会员了，请先注册成为会员！");
+		try {
+			conn = DBUtil.getConnection();
+			String sql = "UPDATE customer_infor \r\n" + 
+					"SET customer_VIPwhether = 1 \r\n" + 
+					"WHERE customer_id = ?";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, Bean_customer_infor.currentLogincustomer.getCustomer_id());
+			pst.executeUpdate();
+			pst.close();
+			sql = "UPDATE customer_infor SET customer_VIPddl = DATE_ADD(customer_VIPddl,INTERVAL ? MONTH) WHERE customer_id = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setInt(1, time);
+			pst.setString(2, Bean_customer_infor.currentLogincustomer.getCustomer_id());
+			pst.executeUpdate();
+			pst.close();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}finally {
+			if(conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
+	}
+
 }
