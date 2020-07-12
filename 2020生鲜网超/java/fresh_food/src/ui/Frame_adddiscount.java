@@ -7,6 +7,10 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.SimpleFormatter;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -112,10 +116,14 @@ public class Frame_adddiscount extends JDialog implements ActionListener{
 			return;
 		}
 		else if(e.getSource()==this.btnOk){
+			String start_time = this.edtStartDate.getText();
+			String end_time = this.edtFinishDate.getText();
+//			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//			sdf.setLenient(false);
 			Bean_discount_infor discount_infor = new Bean_discount_infor();
 			discount_infor.setDiscount_id(this.discount_id_Name.getText());
-			discount_infor.setStart_date(Timestamp.valueOf(this.edtStartDate.getText()));
-			discount_infor.setEnd_date(Timestamp.valueOf(this.discoun_EndDate.getText()));
+			discount_infor.setStart_date(Timestamp.valueOf(start_time));
+			discount_infor.setEnd_date(Timestamp.valueOf(end_time));
 			discount_infor.setProduct_id(this.product_id_textField.getText());
 			discount_infor.setFresh_food_id(this.freshfood_id_textField.getText());
 			discount_infor.setDiscount_price(Float.valueOf(this.discount_price_textField.getText()));

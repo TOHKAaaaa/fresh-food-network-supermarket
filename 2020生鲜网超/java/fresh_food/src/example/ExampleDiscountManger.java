@@ -10,6 +10,7 @@ import itf.IDiscountManger;
 import model.Bean_discount_infor;
 import model.Bean_product_infor;
 import util.BaseException;
+import util.BusinessException;
 import util.DBUtil;
 
 public class ExampleDiscountManger implements IDiscountManger{
@@ -62,11 +63,36 @@ public class ExampleDiscountManger implements IDiscountManger{
 		//优惠券id，开始日期，结束日期，产品类别，生鲜类别，可用价格，减免价格
 		Bean_discount_infor result = new Bean_discount_infor();
 		java.sql.Connection conn = null;
+		if(discount_infor.getDiscount_price()<0)
+			throw new BusinessException("减免价格不能小于0！");
+		if(discount_infor.getApply_price()<0)
+			throw new BusinessException("可用价格不能小于0!");
 		try {
 			conn = DBUtil.getConnection();
-			String sql = "INSERT INTO discount_infor(discount_id,start_date,end_date,product_id,fresh_food_id,apply_price,discount_price)\r\n" + 
-					"VALUES(?,?,?,?,?,?,?)";
+			String sql = "SELECT 1\r\n" + 
+					"FROM discount_infor\r\n" + 
+					"WHERE discount_id = ?";
 			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, discount_infor.getDiscount_id());
+			java.sql.ResultSet rs = pst.executeQuery();
+			if(rs.next())
+				throw new BusinessException("已经存在该编号的优惠券！");
+			rs.close();
+			pst.close();
+			sql = "SELECT 1\r\n" + 
+					"FROM discount_infor\r\n" + 
+					"WHERE product_id = ? AND fresh_food_id = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, discount_infor.getProduct_id());
+			pst.setString(2, discount_infor.getFresh_food_id());
+			rs = pst.executeQuery();
+			if(!rs.next())
+				throw new BusinessException("商品编号或生鲜编号不存在！");
+			rs.close();
+			pst.close();
+			sql = "INSERT INTO discount_infor(discount_id,start_date,end_date,product_id,fresh_food_id,apply_price,discount_price)\r\n" + 
+					"VALUES(?,?,?,?,?,?,?)";
+			pst = conn.prepareStatement(sql);
 			pst.setString(1, discount_infor.getDiscount_id());
 			pst.setTimestamp(2, discount_infor.getStart_date());
 			pst.setTimestamp(3, discount_infor.getEnd_date());
@@ -96,7 +122,24 @@ public class ExampleDiscountManger implements IDiscountManger{
 	@Override
 	public void deleteDiscount(Bean_discount_infor discount_infor) throws BaseException {
 		// TODO Auto-generated method stub
-		
+		java.sql.Connection conn = null;
+		Bean_discount_infor result = new Bean_discount_infor();
+		try {
+			conn = DBUtil.getConnection();
+			String sql = "";
+			
+		} catch (SQLException e) {
+			// TODO: handle exception
+		}finally {
+			if(conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 }
