@@ -3,7 +3,7 @@ package model;
 import java.security.Timestamp;
 
 public class Bean_discount_infor {
-	public static final String[] tableTitles={"优惠券id","启用日期","到期日期","减免价格","可用价格"};
+	public static final String[] tableTitles={"可用优惠券id","启用日期","到期日期","减免价格","可用价格"};
 	
 	private String discount_id;
 	private String product_id;

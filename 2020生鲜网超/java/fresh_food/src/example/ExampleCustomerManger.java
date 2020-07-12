@@ -185,4 +185,40 @@ public class ExampleCustomerManger implements ICustomerManger {
 		}
 	}
 
+	@Override
+	public Bean_customer_infor changeInfor(String name, String sex, String phonenum, String email, String city)
+			throws BaseException {
+		// TODO Auto-generated method stub
+		Bean_customer_infor result = new Bean_customer_infor();
+		java.sql.Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			String sql = "UPDATE customer_infor\r\n" + 
+					"SET customer_name = ?,customer_sex = ?,customer_phonenum = ?,customer_email = ?,customer_city = ?\r\n" + 
+					"WHERE customer_id = ?";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, name);
+			pst.setString(2, sex);
+			pst.setString(3, phonenum);
+			pst.setString(4, email);
+			pst.setString(5, city);
+			pst.setString(6, Bean_customer_infor.currentLogincustomer.getCustomer_id());
+			pst.execute();
+			pst.close();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}finally {
+			if(conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
+	}
+
 }

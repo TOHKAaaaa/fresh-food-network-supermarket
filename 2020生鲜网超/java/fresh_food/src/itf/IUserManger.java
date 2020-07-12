@@ -1,5 +1,7 @@
 package itf;
 
+import java.util.List;
+
 import model.Bean_admin_infor;
 import model.Bean_customer_infor;
 import util.BaseException;
@@ -13,4 +15,6 @@ public interface IUserManger {
 	public void changePwd(Bean_admin_infor user, String oldPwd,String newPwd, String newPwd2)throws BaseException;
 	//管理员删除用户
 	public void deletecustomer(Bean_customer_infor customer)throws BaseException;
+	//管理员显示所有用户
+	public List<Bean_customer_infor> loadallCustomer()throws BaseException;
 }

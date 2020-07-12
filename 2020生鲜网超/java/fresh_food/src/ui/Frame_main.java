@@ -25,6 +25,8 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import com.mysql.fabric.proto.xmlrpc.DigestAuthentication;
+
 import fresh_food.util;
 import model.Bean_admin_infor;
 import model.Bean_customer_infor;
@@ -48,11 +50,13 @@ public class Frame_main extends JFrame implements ActionListener{
 	private JMenuItem changeinfor_MenuItem = new JMenuItem("修改个人信息");
 	private JMenuItem becomeVIP_MenuItem = new JMenuItem("成为会员");
 	private JMenuItem havebought_MenuItem = new JMenuItem("已购商品");
+	private JMenuItem loadinfor_MenuItem = new JMenuItem("显示个人信息");
 	//商品选项
 	private JMenuItem productinfor_MenuItem = new JMenuItem("显示购物车");
 	private JMenuItem productitembuy_MenuItem = new JMenuItem("添加到购物车");
 	//管理员操作
-	private JMenuItem deluser_MenuItem = new JMenuItem("删除用户");
+//	private JMenuItem deluser_MenuItem = new JMenuItem("删除用户");
+	private JMenuItem loadalluser_MenuItem = new JMenuItem("显示所有用户");
 	private JMenuItem consumeuser_MenuItem = new JMenuItem("用户消费情况");
 	private JMenuItem addproduct_MenuItem = new JMenuItem("添加商品");
 	private JMenuItem buyproduct_MenuItem = new JMenuItem("采购商品");
@@ -142,17 +146,20 @@ public class Frame_main extends JFrame implements ActionListener{
 		this.user_menu.add(this.changepwd_MenuItem); this.changepwd_MenuItem.addActionListener(this);
 		this.user_menu.add(this.becomeVIP_MenuItem); this.becomeVIP_MenuItem.addActionListener(this);
 		this.user_menu.add(this.havebought_MenuItem); this.havebought_MenuItem.addActionListener(this);
+		this.user_menu.add(this.loadinfor_MenuItem); this.loadinfor_MenuItem.addActionListener(this);
 		//商品选项
 		this.product_menu.add(this.productinfor_MenuItem); this.productinfor_MenuItem.addActionListener(this);
 		this.product_menu.add(this.productitembuy_MenuItem); this.productitembuy_MenuItem.addActionListener(this);
 		//管理员操作
-		this.admin_menu.add(this.deluser_MenuItem); this.deluser_MenuItem.addActionListener(this);
+//		this.admin_menu.add(this.deluser_MenuItem); this.deluser_MenuItem.addActionListener(this);
+		this.admin_menu.add(this.loadalluser_MenuItem); this.loadalluser_MenuItem.addActionListener(this);
 		this.admin_menu.add(this.consumeuser_MenuItem); this.consumeuser_MenuItem.addActionListener(this);
 		this.admin_menu.add(this.addproduct_MenuItem); this.addproduct_MenuItem.addActionListener(this);
 		this.admin_menu.add(this.buyproduct_MenuItem); this.buyproduct_MenuItem.addActionListener(this);
 		this.admin_menu.add(this.delproduct_MenuItem); this.delproduct_MenuItem.addActionListener(this);
 		this.admin_menu.add(this.adddiscount_MenuItem); this.adddiscount_MenuItem.addActionListener(this);
 		this.admin_menu.add(this.deldiscount_MenuItem); this.deldiscount_MenuItem.addActionListener(this);
+		
 		
 		menubar.add(user_menu);
 		menubar.add(product_menu);
@@ -188,10 +195,14 @@ public class Frame_main extends JFrame implements ActionListener{
 	        });
 		    this.setVisible(true);
 		    
-		    if(Bean_customer_infor.currentLogincustomer==null)
-				admin_menu.setVisible(true);
-			if(Bean_admin_infor.currentLoginadmin==null) 
+		    if(Bean_customer_infor.currentLogincustomer==null) {
+		    	admin_menu.setVisible(true);
+		    	user_menu.setVisible(false);
+		    }
+			if(Bean_admin_infor.currentLoginadmin==null) { 
 				admin_menu.setVisible(false);
+				user_menu.setVisible(true);
+			}	
 		
 	}
 
@@ -216,6 +227,18 @@ public class Frame_main extends JFrame implements ActionListener{
 			Frame_buyproduct dlg = new Frame_buyproduct(this, "采购商品", true);
 			dlg.setVisible(true);
 			Frame_main.this.reloadProductTable();
+		}
+//		else if(e.getSource()==this.deluser_MenuItem) {
+//			Frame_delcustomer dlg = new Frame_delcustomer(this, "删除用户", true);
+//			dlg.setVisible(true);
+//		}
+		else if(e.getSource()==this.loadalluser_MenuItem) {
+			Frame_loadallcustomer dlg = new Frame_loadallcustomer(this,"显示用户",true);
+			dlg.setVisible(true);
+		}
+		else if(e.getSource()==this.changeinfor_MenuItem) {
+			Frame_changeinfor dlg = new Frame_changeinfor(this, "修改信息", true);
+			dlg.setVisible(true);
 		}
 	}
 
