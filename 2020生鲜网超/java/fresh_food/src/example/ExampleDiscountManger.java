@@ -126,10 +126,29 @@ public class ExampleDiscountManger implements IDiscountManger{
 		Bean_discount_infor result = new Bean_discount_infor();
 		try {
 			conn = DBUtil.getConnection();
-			String sql = "";
-			
+			String sql = "SELECT TIMESTAMPDIFF(SECOND,NOW(),end_date),TIMESTAMPDIFF(SECOND,start_date,NOW())\r\n" + 
+					"FROM discount_infor\r\n" + 
+					"WHERE product_id = ? AND fresh_food_id = ?";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, discount_infor.getProduct_id());
+			pst.setString(2, discount_infor.getFresh_food_id());
+			java.sql.ResultSet rs = pst.executeQuery();
+			if(rs.next()) {
+				if(rs.getInt(1)>=0&&rs.getInt(2)<=0)
+					throw new BusinessException("现在还在优惠期间，无法删除!");
+			}
+			pst.close();
+			rs.close();
+			sql = "DELETE FROM discount_infor\r\n" + 
+					"WHERE product_id = ? AND fresh_food_id = ?";
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, discount_infor.getProduct_id());
+			pst.setString(2, discount_infor.getFresh_food_id());
+			pst.execute();
+			pst.close();
 		} catch (SQLException e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}finally {
 			if(conn!=null) {
 				try {

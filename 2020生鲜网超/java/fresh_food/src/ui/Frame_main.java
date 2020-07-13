@@ -33,6 +33,8 @@ import model.Bean_customer_infor;
 import model.Bean_discount_infor;
 import model.Bean_product_infor;
 import util.BaseException;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
 
 public class Frame_main extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -55,7 +57,7 @@ public class Frame_main extends JFrame implements ActionListener{
 	
 	//商品选项
 	private JMenuItem productinfor_MenuItem = new JMenuItem("显示购物车");
-	private JMenuItem productitembuy_MenuItem = new JMenuItem("添加到购物车");
+//	private JMenuItem productitembuy_MenuItem = new JMenuItem("添加到购物车");
 	//管理员操作
 //	private JMenuItem deluser_MenuItem = new JMenuItem("删除用户");
 	private JMenuItem loadalluser_MenuItem = new JMenuItem("显示所有用户");
@@ -79,6 +81,7 @@ public class Frame_main extends JFrame implements ActionListener{
 	private Bean_product_infor curProduct = null;
 	List<Bean_product_infor> allProduct = null;
 	List<Bean_discount_infor> allDiscount = null;
+	private final JButton button = new JButton("\u6DFB\u52A0\u5230\u8D2D\u7269\u8F66");
 	
 	private void reloadProductTable(){//这是测试数据，需要用实际数替换
 		try {
@@ -152,7 +155,7 @@ public class Frame_main extends JFrame implements ActionListener{
 		this.user_menu.add(this.havebought_MenuItem); this.havebought_MenuItem.addActionListener(this);
 		//商品选项
 		this.product_menu.add(this.productinfor_MenuItem); this.productinfor_MenuItem.addActionListener(this);
-		this.product_menu.add(this.productitembuy_MenuItem); this.productitembuy_MenuItem.addActionListener(this);
+//		this.product_menu.add(this.productitembuy_MenuItem); this.productitembuy_MenuItem.addActionListener(this);
 		//管理员操作
 //		this.admin_menu.add(this.deluser_MenuItem); this.deluser_MenuItem.addActionListener(this);
 		this.admin_menu.add(this.loadalluser_MenuItem); this.loadalluser_MenuItem.addActionListener(this);
@@ -187,6 +190,19 @@ public class Frame_main extends JFrame implements ActionListener{
 		    
 		 this.reloadProductTable();
 		 
+		 this.dataDisount.addMouseListener(new MouseAdapter (){
+
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int i=Frame_main.this.dataDisount.getSelectedRow();
+					if(i<0) {
+						return;
+					}
+					
+				}
+		    	
+		    });
+		 
 		//状态栏
 		    statusBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 		    JLabel label;
@@ -196,6 +212,9 @@ public class Frame_main extends JFrame implements ActionListener{
 				label=new JLabel("欢迎"+Bean_admin_infor.currentLoginadmin.getAdmin_name()+"光临生鲜网超!");
 			statusBar.add(label);
 		    this.getContentPane().add(statusBar,BorderLayout.SOUTH);
+		    button.setHorizontalAlignment(SwingConstants.RIGHT);
+		    
+		    statusBar.add(button);
 		    
 		    this.addWindowListener(new WindowAdapter(){   
 		    	public void windowClosing(WindowEvent e){ 
@@ -264,6 +283,10 @@ public class Frame_main extends JFrame implements ActionListener{
 		}
 		else if(e.getSource()==this.adddiscount_MenuItem) {
 			Frame_adddiscount dlg = new Frame_adddiscount(this, "添加优惠券", true);
+			dlg.setVisible(true);
+		}
+		else if(e.getSource()==this.deldiscount_MenuItem) {
+			Frame_deldiscount dlg = new Frame_deldiscount(this, "删除优惠券", true);
 			dlg.setVisible(true);
 		}
 	}

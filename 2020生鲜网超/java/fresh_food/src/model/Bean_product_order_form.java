@@ -3,6 +3,8 @@ package model;
 import java.security.Timestamp;
 
 public class Bean_product_order_form {
+	public static final String[] tableTitles={"订单编号","生鲜编号","商品编号","商品名称","数量","单价","最终价"};
+	
 	private String order_form_id;
 	private String discount_id;
 	private String customer_id;
@@ -11,7 +13,35 @@ public class Bean_product_order_form {
 	private float original_price;
 	private float finally_price;
 	private Timestamp request_send_time;
+	private String product_id;
+	private String fresh_food_id;
+	private int product_num;
+	private String product_name;
 	
+	public String getProduct_name() {
+		return product_name;
+	}
+	public void setProduct_name(String product_name) {
+		this.product_name = product_name;
+	}
+	public String getProduct_id() {
+		return product_id;
+	}
+	public void setProduct_id(String product_id) {
+		this.product_id = product_id;
+	}
+	public String getFresh_food_id() {
+		return fresh_food_id;
+	}
+	public void setFresh_food_id(String fresh_food_id) {
+		this.fresh_food_id = fresh_food_id;
+	}
+	public int getProduct_num() {
+		return product_num;
+	}
+	public void setProduct_num(int product_num) {
+		this.product_num = product_num;
+	}
 	public String getOrder_form_id() {
 		return order_form_id;
 	}
@@ -59,6 +89,28 @@ public class Bean_product_order_form {
 	}
 	public void setRequest_send_time(Timestamp request_send_time) {
 		this.request_send_time = request_send_time;
+	}
+	
+//	tableTitles={"订单编号","生鲜编号","商品编号","商品名称","数量","单价","最终价"};
+	public String getCell(int col) {
+		String result;
+		if(col==0)
+			result = this.getOrder_form_id();
+		else if (col==1) 
+			result = this.getFresh_food_id();
+		else if (col==2)
+			result = this.getProduct_id();
+		else if (col==3)
+			result = this.getProduct_name();
+		else if (col==4)
+			result = String.valueOf(this.getProduct_num());
+		else if(col==5)
+			result = String.valueOf(this.getOriginal_price());
+		else if(col==6)
+			result = String.valueOf(this.getFinally_price());
+		else
+			result = "";
+		return result;
 	}
 	
 }

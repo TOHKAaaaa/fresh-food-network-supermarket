@@ -4,6 +4,8 @@ import java.util.List;
 
 import model.Bean_admin_infor;
 import model.Bean_customer_infor;
+import model.Bean_order_form_details;
+import model.Bean_product_order_form;
 import util.BaseException;
 
 public interface IUserManger {
@@ -17,4 +19,6 @@ public interface IUserManger {
 	public void deletecustomer(Bean_customer_infor customer)throws BaseException;
 	//管理员显示所有用户
 	public List<Bean_customer_infor> loadallCustomer()throws BaseException;
+	//管理员购买商品
+//	public Bean_product_order_form buyproduct(Bean_product_order_form order_form)throws BaseException;
 }

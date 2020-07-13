@@ -9,6 +9,8 @@ import com.mysql.jdbc.Connection;
 import itf.IUserManger;
 import model.Bean_admin_infor;
 import model.Bean_customer_infor;
+import model.Bean_order_form_details;
+import model.Bean_product_order_form;
 import util.BaseException;
 import util.BusinessException;
 import util.DBUtil;
@@ -233,5 +235,32 @@ public class ExampleUserManger implements IUserManger {
 		}
 		return result;
 	}
+
+//	@Override
+//	public Bean_product_order_form buyproduct(Bean_product_order_form order_form) throws BaseException {
+//		// TODO Auto-generated method stub
+//		java.sql.Connection conn = null;
+//		Bean_product_order_form result = new Bean_product_order_form();
+//		try {
+//			conn = DBUtil.getConnection();
+//			String sql = "";
+//			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+//			
+//		} catch (SQLException e) {
+//			// TODO: handle exception
+//		}finally {
+//			if(conn!=null) {
+//				try {
+//					conn.close();
+//				} catch (SQLException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//		return result;
+//	}
+
+	
 
 }

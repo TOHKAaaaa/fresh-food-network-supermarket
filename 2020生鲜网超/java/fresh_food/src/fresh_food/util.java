@@ -1,10 +1,12 @@
 package fresh_food;
 
 import example.ExampleCustomerManger;
+import example.ExampleCustomerProductManger;
 import example.ExampleDiscountManger;
 import example.ExampleUserManger;
 import example.ExampleUserProductManger;
 import itf.ICustomerManger;
+import itf.ICustomerProductManger;
 import itf.IDiscountManger;
 import itf.IUserManger;
 import itf.IUserProductManger;
@@ -24,4 +26,5 @@ public class util {
 	public static ICustomerManger customerManger = new ExampleCustomerManger();
 	public static IUserProductManger userProductManger = new ExampleUserProductManger();
 	public static IDiscountManger discountManger = new ExampleDiscountManger();
+	public static ICustomerProductManger customerProductManger = new ExampleCustomerProductManger();
 }
