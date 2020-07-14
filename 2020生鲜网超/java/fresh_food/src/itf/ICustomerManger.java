@@ -1,8 +1,10 @@
 package itf;
 
 import java.security.Timestamp;
+import java.util.List;
 
 import model.Bean_customer_infor;
+import model.Bean_product_order_form;
 import util.BaseException;
 
 public interface ICustomerManger {
@@ -19,4 +21,6 @@ public interface ICustomerManger {
 	public Bean_customer_infor becomeVIP (int time)throws BaseException;
 	//客户续费会员
 	public Bean_customer_infor renewVIP (int time)throws BaseException;
+	//已购商品
+	public List<Bean_product_order_form> list()throws BaseException;
 }

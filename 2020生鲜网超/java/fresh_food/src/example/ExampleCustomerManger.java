@@ -2,11 +2,14 @@ package example;
 
 import java.security.Timestamp;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mysql.jdbc.Connection;
 
 import itf.ICustomerManger;
 import model.Bean_customer_infor;
+import model.Bean_product_order_form;
 import util.BaseException;
 import util.BusinessException;
 import util.DBUtil;
@@ -281,6 +284,51 @@ public class ExampleCustomerManger implements ICustomerManger {
 			pst.setString(2, Bean_customer_infor.currentLogincustomer.getCustomer_id());
 			pst.executeUpdate();
 			pst.close();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}finally {
+			if(conn!=null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public List<Bean_product_order_form> list() throws BaseException {
+		// TODO Auto-generated method stub
+		java.sql.Connection conn = null;
+		List<Bean_product_order_form> result = new ArrayList<Bean_product_order_form>();
+		try {
+			conn = DBUtil.getConnection();
+//			CustomerTitle[]={"客户编号","订单编号","生鲜编号","商品编号","商品名称","数量","结算单价"};
+			String sql = "SELECT customer_id,order_form_id,fresh_food_id,product_id,product_name,product_num,finally_price\r\n" + 
+					"FROM product_order_form\r\n" + 
+					"WHERE order_form_state = 1\r\n" + 
+					"AND customer_id = ?";
+			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setString(1, Bean_customer_infor.currentLogincustomer.getCustomer_id());
+			java.sql.ResultSet rs = pst.executeQuery();
+			while(rs.next()) {
+				Bean_product_order_form bean_customer_infor = new Bean_product_order_form();
+				bean_customer_infor.setCustomer_id(rs.getString(1));
+				bean_customer_infor.setOrder_form_id(rs.getString(2));
+				bean_customer_infor.setFresh_food_id(rs.getString(3));
+				bean_customer_infor.setProduct_id(rs.getString(4));
+				bean_customer_infor.setProduct_name(rs.getString(5));
+				bean_customer_infor.setProduct_num(rs.getInt(6));
+				bean_customer_infor.setFinally_price(rs.getFloat(7));
+				result.add(bean_customer_infor);
+			}
+			rs.close();
+			pst.close();
+			return result;
 		} catch (SQLException e) {
 			// TODO: handle exception
 			e.printStackTrace();

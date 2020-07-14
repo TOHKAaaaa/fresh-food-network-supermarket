@@ -316,15 +316,23 @@ public class Frame_main extends JFrame implements ActionListener{
 				order_form.setProduct_name(this.ProductData[i][3].toString());
 				order_form.setOriginal_price(Float.valueOf(this.ProductData[i][5].toString()));
 				order_form.setFinally_price(Float.valueOf(this.ProductData[i][6].toString()));
-				if(j>=0) 
+				if(j>=0) {
 					order_form.setDiscount_id(this.DiscountData[j][0].toString());
+					order_form.setApply_price(Float.valueOf(this.DiscountData[j][4].toString()));
+					order_form.setDiscount_price(Float.valueOf(this.DiscountData[j][3].toString()));
+					System.out.println(this.DiscountData[j][4].toString());
+					System.out.println(order_form.getApply_price());
+				}
+				else 
+					order_form.setDiscount_id("0");
 				Frame_customerbuyproduct dlg = new Frame_customerbuyproduct(order_form);
 				dlg.setVisible(true);
 			}
 			Frame_main.this.reloadProductTable();
 		}
 		else if(e.getSource()==this.havebought_MenuItem) {
-			
+			Frame_havebought dlg = new Frame_havebought(this, "“—π∫…Ã∆∑", true);
+			dlg.setVisible(true);
 		}
 	}
 

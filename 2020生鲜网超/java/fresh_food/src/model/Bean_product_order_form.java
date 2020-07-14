@@ -17,7 +17,22 @@ public class Bean_product_order_form {
 	private String fresh_food_id;
 	private int product_num;
 	private String product_name;
+	private float apply_price;
+	private float discount_price;
 	
+	
+	public float getApply_price() {
+		return apply_price;
+	}
+	public void setApply_price(float apply_price) {
+		this.apply_price = apply_price;
+	}
+	public float getDiscount_price() {
+		return discount_price;
+	}
+	public void setDiscount_price(float discount_price) {
+		this.discount_price = discount_price;
+	}
 	public String getProduct_name() {
 		return product_name;
 	}

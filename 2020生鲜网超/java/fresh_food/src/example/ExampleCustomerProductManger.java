@@ -21,7 +21,6 @@ public class ExampleCustomerProductManger implements ICustomerProductManger{
 		// TODO Auto-generated method stub
 		Bean_product_order_form result = new Bean_product_order_form();
 		java.sql.Connection conn = null;
-		System.out.println(order_form.getProduct_id());
 		try {
 			conn = DBUtil.getConnection();
 			String sql = "SELECT MAX(order_form_id)\r\n" + 
@@ -35,20 +34,41 @@ public class ExampleCustomerProductManger implements ICustomerProductManger{
 				max = rs.getInt(1)+1;
 			rs.close();
 			pst.close();
-			sql = "INSERT INTO product_order_form(order_form_id,discount_id,customer_id,original_price,finally_price,order_form_state,fresh_food_id,product_id,product_num,product_name,addr_id)\r\n" + 
-					"VALUES(?,?,?,?,?,0,?,?,?,?,1)";
-			pst = conn.prepareStatement(sql);
-			pst.setString(1, String.valueOf(max));
-			pst.setString(2, order_form.getDiscount_id());
-			pst.setString(3, Bean_customer_infor.currentLogincustomer.getCustomer_id());
-			pst.setFloat(4, order_form.getOriginal_price());
-			pst.setFloat(5, order_form.getFinally_price());
-			pst.setString(6, order_form.getFresh_food_id());
-			pst.setString(7, order_form.getProduct_id());
-			pst.setInt(8, order_form.getProduct_num());
-			pst.setString(9, order_form.getProduct_name());
-			pst.execute();
-			pst.close();
+			if(Bean_customer_infor.currentLogincustomer.isCustomer_VIPwhether().equals("·ñ")) {
+				sql = "INSERT INTO product_order_form(order_form_id,customer_id,finally_price,order_form_state,fresh_food_id,product_id,product_num,product_name,addr_id,discount_id,apply_price,discount_price)\r\n" + 
+						"VALUES(?,?,?,0,?,?,?,?,1,?,?,?)";
+				pst = conn.prepareStatement(sql);
+				pst.setString(1, String.valueOf(max));
+				pst.setString(2, Bean_customer_infor.currentLogincustomer.getCustomer_id());
+				pst.setFloat(3, order_form.getOriginal_price());
+				pst.setString(4, order_form.getFresh_food_id());
+				pst.setString(5, order_form.getProduct_id());
+				pst.setInt(6, order_form.getProduct_num());
+				pst.setString(7, order_form.getProduct_name());
+				pst.setString(8, order_form.getDiscount_id());
+				pst.setFloat(9, order_form.getApply_price());
+				pst.setFloat(10, order_form.getDiscount_price());
+				pst.execute();
+				pst.close();
+			}
+			else {
+				sql = "INSERT INTO product_order_form(order_form_id,customer_id,original_price,finally_price,order_form_state,fresh_food_id,product_id,product_num,product_name,addr_id,discount_id,apply_price,discount_price)\r\n" + 
+						"VALUES(?,?,?,?,0,?,?,?,?,1,?,?,?)";
+				pst = conn.prepareStatement(sql);
+				pst.setString(1, String.valueOf(max));
+				pst.setString(2, Bean_customer_infor.currentLogincustomer.getCustomer_id());
+				pst.setFloat(3, order_form.getOriginal_price());
+				pst.setFloat(4, order_form.getFinally_price());
+				pst.setString(5, order_form.getFresh_food_id());
+				pst.setString(6, order_form.getProduct_id());
+				pst.setInt(7, order_form.getProduct_num());
+				pst.setString(8, order_form.getProduct_name());
+				pst.setString(9, order_form.getDiscount_id());
+				pst.setFloat(10, order_form.getApply_price());
+				pst.setFloat(11, order_form.getDiscount_price());
+				pst.execute();
+				pst.close();
+			}
 		} catch (SQLException e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -145,9 +165,11 @@ public class ExampleCustomerProductManger implements ICustomerProductManger{
 		// TODO Auto-generated method stub
 		java.sql.Connection conn = null;
 		float result = 0;
+		float apply_price;
+		float disocunt_price;
 		try {
 			conn = DBUtil.getConnection();
-			String sql = "SELECT product_num*finally_price\r\n" + 
+			String sql = "SELECT product_num*finally_price,apply_price,discount_price\r\n" + 
 					"FROM product_order_form\r\n" + 
 					"WHERE order_form_id = ? AND fresh_food_id = ? AND product_id = ?";
 			java.sql.PreparedStatement pst = conn.prepareStatement(sql);
@@ -155,8 +177,16 @@ public class ExampleCustomerProductManger implements ICustomerProductManger{
 			pst.setString(2, order_form.getFresh_food_id());
 			pst.setString(3, order_form.getProduct_id());
 			java.sql.ResultSet rs = pst.executeQuery();
-			if(rs.next())
+			if(rs.next()) {
 				result = rs.getFloat(1);
+				System.out.println(result);
+				apply_price = rs.getFloat(2);
+				disocunt_price = rs.getFloat(3);
+				if(result>apply_price) {
+					result = result - disocunt_price;
+					System.out.println(result);
+				}
+			}
 			rs.close();
 			pst.close();
 			sql = "SELECT product_num\r\n" + 
