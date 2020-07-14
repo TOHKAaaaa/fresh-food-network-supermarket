@@ -27,8 +27,10 @@ public class Frame_customerbuyproduct extends JDialog implements ActionListener{
 	private Button btnCancel = new Button("取消");
 	private JLabel product_num_label = new JLabel("购买数量:");
 	private JTextField product_num_textField = new JTextField();
-	public Frame_customerbuyproduct(Frame f, String s, boolean b) {
-		super(f, s, b);
+	private Bean_product_order_form p;
+	public Frame_customerbuyproduct(Bean_product_order_form order_form) {
+		this.p = order_form;
+		setTitle("添加到购物车");
 		toolBar.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		toolBar.add(this.btnOk);
 		toolBar.add(btnCancel);
@@ -50,17 +52,16 @@ public class Frame_customerbuyproduct extends JDialog implements ActionListener{
 		if(e.getSource()==this.btnCancel)
 			this.setVisible(false);
 		else if(e.getSource()==this.btnOk){
-			Bean_product_order_form p = new Bean_product_order_form();
-			int num = Integer.valueOf(this.product_num_textField.getText());
-			p.setProduct_num(num);
+			p.setProduct_num(Integer.valueOf(this.product_num_textField.getText()));
 			try {
+				System.out.println(p.getProduct_id());
 				util.customerProductManger.buyproduct(p);
 				this.setVisible(false);
 			} catch (BaseException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "错误",JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			JOptionPane.showMessageDialog(null,"采购成功", "采购商品",JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null,"添加到购物车成功", "购买商品",JOptionPane.PLAIN_MESSAGE);
 			this.setVisible(false);
 		}
 	}

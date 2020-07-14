@@ -26,21 +26,23 @@ import model.Bean_customer_infor;
 import model.Bean_product_infor;
 import model.Bean_product_order_form;
 import util.BaseException;
+import javax.swing.JLabel;
 
 public class Frame_loadallcustomerproduct extends JDialog implements ActionListener{
 
 	private JPanel toolBar = new JPanel();
 	private Button btnDelete = new Button("删除商品");
+	private Button btnPaid = new Button("结算商品");
 	private Object OrderTitle[]=Bean_product_order_form.tableTitles;
 	private Object OrderData[][];
 	DefaultTableModel tablmod=new DefaultTableModel();
 	private JTable CustomerTable=new JTable(tablmod);
 	private void reloadOrderTable(){
 		try {
-			List<Bean_product_infor> allOrder=(new ExampleCustomerProductManger()).loadall();
-			OrderData =new Object[allOrder.size()][Bean_customer_infor.tableTitles.length];
+			List<Bean_product_order_form> allOrder=(new ExampleCustomerProductManger()).loadall();
+			OrderData =new Object[allOrder.size()][Bean_product_order_form.tableTitles.length];
 			for(int i=0;i<allOrder.size();i++){
-				for(int j=0;j<Bean_customer_infor.tableTitles.length;j++)
+				for(int j=0;j<Bean_product_order_form.tableTitles.length;j++)
 					OrderData[i][j]=allOrder.get(i).getCell(j);
 			}
 			tablmod.setDataVector(OrderData,OrderTitle);
@@ -58,6 +60,7 @@ public class Frame_loadallcustomerproduct extends JDialog implements ActionListe
 //		toolBar.add(btnAdd);
 //		toolBar.add(btnResetPwd);
 		toolBar.add(this.btnDelete);
+		toolBar.add(this.btnPaid);
 		this.getContentPane().add(toolBar, BorderLayout.NORTH);
 		//提取现有数据
 		this.reloadOrderTable();
@@ -75,6 +78,7 @@ public class Frame_loadallcustomerproduct extends JDialog implements ActionListe
 //		this.btnAdd.addActionListener(this);
 //		this.btnResetPwd.addActionListener(this);
 		this.btnDelete.addActionListener(this);
+		this.btnPaid.addActionListener(this);
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				//System.exit(0);
@@ -109,6 +113,7 @@ public class Frame_loadallcustomerproduct extends JDialog implements ActionListe
 //				
 //			}
 //		}
+//		tableTitles={"订单编号","生鲜编号","商品编号","商品名称","数量","单价","最终价"};
 		if(e.getSource()==this.btnDelete){
 			int i=this.CustomerTable.getSelectedRow();
 			if(i<0) {
@@ -116,12 +121,53 @@ public class Frame_loadallcustomerproduct extends JDialog implements ActionListe
 				return;
 			}
 			if(JOptionPane.showConfirmDialog(this,"确定删除商品吗？","确认",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
-				String customer_id=this.OrderData[i][2].toString();
-//				Bean_customer_infor customer = new Bean_customer_infor();
-//				customer.setCustomer_id(userid);
+				String orderid=this.OrderData[i][0].toString();
+				String fresh_food_id = this.OrderData[i][1].toString();
+				String product_id = this.OrderData[i][2].toString();
+				int num = Integer.valueOf(this.OrderData[i][4].toString());
+				float price = Float.valueOf(this.OrderData[i][5].toString());
+				float finally_price = Float.valueOf(this.OrderData[i][6].toString());
+				Bean_product_order_form customer = new Bean_product_order_form();
+				customer.setOrder_form_id(orderid);
+				customer.setFresh_food_id(fresh_food_id);
+				customer.setProduct_id(product_id);
+				customer.setProduct_num(num);
+				customer.setOriginal_price(price);
+				customer.setFinally_price(finally_price);
 				try {
-//					(new ExampleUserManger()).deletecustomer(customer);
-//					this.reloadUserTable();
+					(new ExampleCustomerProductManger()).delproduct(customer);
+					this.reloadOrderTable();
+				} catch (BaseException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		}
+		else if(e.getSource()==this.btnPaid) {
+			int i=this.CustomerTable.getSelectedRow();
+			if(i<0) {
+				JOptionPane.showMessageDialog(null,  "请选择商品","提示",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			if(JOptionPane.showConfirmDialog(this,"确定结算商品吗？","确认",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+				String orderid=this.OrderData[i][0].toString();
+				String fresh_food_id = this.OrderData[i][1].toString();
+				String product_id = this.OrderData[i][2].toString();
+				int num = Integer.valueOf(this.OrderData[i][4].toString());
+				float price = Float.valueOf(this.OrderData[i][5].toString());
+				float finally_price = Float.valueOf(this.OrderData[i][6].toString());
+				Bean_product_order_form customer = new Bean_product_order_form();
+				customer.setOrder_form_id(orderid);
+				customer.setFresh_food_id(fresh_food_id);
+				customer.setProduct_id(product_id);
+				customer.setProduct_num(num);
+				customer.setOriginal_price(price);
+				customer.setFinally_price(finally_price);
+				try {
+					float result = 0;
+					result = (new ExampleCustomerProductManger()).paidOrder_form(customer);
+					JOptionPane.showConfirmDialog(this, "本次结算共花费"+result+"元,欢迎下次光临！","确认",JOptionPane.PLAIN_MESSAGE);
+					this.reloadOrderTable();
 				} catch (BaseException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),"错误",JOptionPane.ERROR_MESSAGE);
 				}

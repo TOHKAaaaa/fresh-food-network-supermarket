@@ -21,4 +21,6 @@ public interface IUserManger {
 	public List<Bean_customer_infor> loadallCustomer()throws BaseException;
 	//管理员购买商品
 //	public Bean_product_order_form buyproduct(Bean_product_order_form order_form)throws BaseException;
+	//用户消费情况
+	public List<Bean_product_order_form> list()throws BaseException;
 }

@@ -31,7 +31,9 @@ import fresh_food.util;
 import model.Bean_admin_infor;
 import model.Bean_customer_infor;
 import model.Bean_discount_infor;
+import model.Bean_order_form_details;
 import model.Bean_product_infor;
+import model.Bean_product_order_form;
 import util.BaseException;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -215,6 +217,7 @@ public class Frame_main extends JFrame implements ActionListener{
 		    button.setHorizontalAlignment(SwingConstants.RIGHT);
 		    
 		    statusBar.add(button);
+		    button.addActionListener(this);
 		    
 		    this.addWindowListener(new WindowAdapter(){   
 		    	public void windowClosing(WindowEvent e){ 
@@ -288,6 +291,40 @@ public class Frame_main extends JFrame implements ActionListener{
 		else if(e.getSource()==this.deldiscount_MenuItem) {
 			Frame_deldiscount dlg = new Frame_deldiscount(this, "删除优惠券", true);
 			dlg.setVisible(true);
+		}
+		else if(e.getSource()==this.productinfor_MenuItem) {
+			Frame_loadallcustomerproduct dlg = new Frame_loadallcustomerproduct(this, "显示购物车", true);
+			dlg.setVisible(true);
+		}
+		else if(e.getSource()==this.consumeuser_MenuItem) {
+			Frame_consumeuser dlg = new Frame_consumeuser(this, "用户消费情况", true);
+			dlg.setVisible(true);
+		}
+		else if(e.getSource()==this.button) {
+//			 tableTitles={"生鲜编号","生鲜类别","商品编号","商品名称","数量","价格","会员价","商品描述"};product
+//			 tableTitles={"可用优惠券id","启用日期","到期日期","减免价格","可用价格"}discount
+			int i = this.dataProduct.getSelectedRow();
+			int j = this.dataDisount.getSelectedRow();
+			if(i<0) {
+				JOptionPane.showMessageDialog(null,  "请选择商品","提示",JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			if(JOptionPane.showConfirmDialog(this,"确定购买该商品吗？","确认",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION)	{
+				Bean_product_order_form order_form = new Bean_product_order_form();
+				order_form.setProduct_id(this.ProductData[i][2].toString());
+				order_form.setFresh_food_id(this.ProductData[i][0].toString());
+				order_form.setProduct_name(this.ProductData[i][3].toString());
+				order_form.setOriginal_price(Float.valueOf(this.ProductData[i][5].toString()));
+				order_form.setFinally_price(Float.valueOf(this.ProductData[i][6].toString()));
+				if(j>=0) 
+					order_form.setDiscount_id(this.DiscountData[j][0].toString());
+				Frame_customerbuyproduct dlg = new Frame_customerbuyproduct(order_form);
+				dlg.setVisible(true);
+			}
+			Frame_main.this.reloadProductTable();
+		}
+		else if(e.getSource()==this.havebought_MenuItem) {
+			
 		}
 	}
 

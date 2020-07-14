@@ -112,5 +112,25 @@ public class Bean_product_order_form {
 			result = "";
 		return result;
 	}
-	
+//	CustomerTitle[]={"客户编号","订单编号","生鲜编号","商品编号","商品名称","数量","结算单价"};
+	public String getconCell(int col) {
+		String result;
+		if(col==0)
+			result = this.getCustomer_id();
+		else if(col==1)
+			result = this.getOrder_form_id();
+		else if(col==2)
+			result = this.getFresh_food_id();
+		else if(col==3)
+			result = this.getProduct_id();
+		else if(col==4)
+			result = this.getProduct_name();
+		else if(col==5)
+			result = String.valueOf(this.getProduct_num());
+		else if(col==6)
+			result = String.valueOf(this.getFinally_price());
+		else
+			result = "";
+		return result;
+	}
 }
