@@ -185,6 +185,7 @@ public class ExampleCustomerProductManger implements ICustomerProductManger{
 				if(result>apply_price) {
 					result = result - disocunt_price;
 					System.out.println(result);
+					System.out.println(disocunt_price);
 				}
 			}
 			rs.close();

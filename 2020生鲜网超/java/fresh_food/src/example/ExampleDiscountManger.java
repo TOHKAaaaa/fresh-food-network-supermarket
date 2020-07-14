@@ -81,13 +81,14 @@ public class ExampleDiscountManger implements IDiscountManger{
 			pst.close();
 			sql = "SELECT 1\r\n" + 
 					"FROM discount_infor\r\n" + 
-					"WHERE product_id = ? AND fresh_food_id = ?";
+					"WHERE product_id = ? AND fresh_food_id = ? AND discount_id = ?";
 			pst = conn.prepareStatement(sql);
 			pst.setString(1, discount_infor.getProduct_id());
 			pst.setString(2, discount_infor.getFresh_food_id());
+			pst.setString(3, discount_infor.getDiscount_id());
 			rs = pst.executeQuery();
-			if(!rs.next())
-				throw new BusinessException("商品编号或生鲜编号不存在！");
+			if(rs.next())
+				throw new BusinessException("商品编号或生鲜编号已存在！");
 			rs.close();
 			pst.close();
 			sql = "INSERT INTO discount_infor(discount_id,start_date,end_date,product_id,fresh_food_id,apply_price,discount_price)\r\n" + 
